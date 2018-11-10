@@ -2,14 +2,16 @@
 
 import { TileLayer as LeafletTileLayer } from 'leaflet'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import GridLayer from './GridLayer'
 import type { GridLayerProps } from './types'
 
 type LeafletElement = LeafletTileLayer
 type Props = { url: string } & GridLayerProps
 
-class TileLayer extends GridLayer<LeafletElement, Props> {
+export default class TileLayer extends GridLayer<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
     return new LeafletTileLayer(props.url, this.getOptions(props))
   }
@@ -21,5 +23,3 @@ class TileLayer extends GridLayer<LeafletElement, Props> {
     }
   }
 }
-
-export default withLeaflet(TileLayer)

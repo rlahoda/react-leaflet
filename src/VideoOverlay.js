@@ -2,7 +2,7 @@
 
 import { VideoOverlay as LeafletVideoOverlay, latLngBounds } from 'leaflet'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import MapLayer from './MapLayer'
 import type { LatLngBounds, MapLayerProps } from './types'
 
@@ -16,7 +16,9 @@ type Props = {
   zIndex?: number,
 } & MapLayerProps
 
-class VideoOverlay extends MapLayer<LeafletElement, Props> {
+export default class VideoOverlay extends MapLayer<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
     return new LeafletVideoOverlay(
       props.url,
@@ -54,5 +56,3 @@ class VideoOverlay extends MapLayer<LeafletElement, Props> {
     }
   }
 }
-
-export default withLeaflet(VideoOverlay)

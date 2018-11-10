@@ -2,7 +2,7 @@
 
 import { Control } from 'leaflet'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import MapControl from './MapControl'
 import type { MapControlProps } from './types'
 
@@ -14,10 +14,10 @@ type Props = {
   zoomOutTitle?: string,
 } & MapControlProps
 
-class ZoomControl extends MapControl<LeafletElement, Props> {
+export default class ZoomControl extends MapControl<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
     return new Control.Zoom(props)
   }
 }
-
-export default withLeaflet(ZoomControl)

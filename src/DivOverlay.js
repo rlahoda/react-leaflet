@@ -17,9 +17,13 @@ export default class DivOverlay<
   LeafletElement,
   Props: DivOverlayProps,
 > extends MapComponent<LeafletElement & DivOverlayTypes, Props> {
-  constructor(props: Props) {
-    super(props)
-    this.leafletElement = this.createLeafletElement(props)
+  _leafletElement: LeafletElement
+
+  get leafletElement(): LeafletElement {
+    if (this._leafletElement == null) {
+      this._leafletElement = this.createLeafletElement(this.props)
+    }
+    return this._leafletElement
   }
 
   createLeafletElement(_props: Props) {
@@ -30,15 +34,15 @@ export default class DivOverlay<
 
   componentDidUpdate(prevProps: Props) {
     updateClassName(
-      this.leafletElement._container,
+      this._leafletElement._container,
       prevProps.className,
       this.props.className,
     )
 
     this.updateLeafletElement(prevProps, this.props)
 
-    if (this.leafletElement.isOpen()) {
-      this.leafletElement.update()
+    if (this._leafletElement.isOpen()) {
+      this._leafletElement.update()
       this.onRender()
     }
   }
@@ -59,8 +63,12 @@ export default class DivOverlay<
   onRender() {}
 
   render() {
+    console.log('render DivOverlay', this.leafletElement._contentNode)
     if (this.leafletElement._contentNode) {
-      return createPortal(this.props.children, this.leafletElement._contentNode)
+      return createPortal(
+        this.props.children,
+        this._leafletElement._contentNode,
+      )
     }
     return null
   }

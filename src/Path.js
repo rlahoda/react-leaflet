@@ -33,19 +33,6 @@ export default class Path<
   LeafletElement: PathType,
   Props: PathProps,
 > extends MapLayer<LeafletElement, Props> {
-  leafletElement: LeafletElement
-
-  constructor(props: Props) {
-    super(props)
-    this.leafletElement = this.createLeafletElement(props)
-    if (this.contextValue == null) {
-      this.contextValue = {
-        ...props.leaflet,
-        popupContainer: this.leafletElement,
-      }
-    }
-  }
-
   componentDidUpdate(prevProps: Props) {
     super.componentDidUpdate(prevProps)
     this.setStyleIfChanged(prevProps, this.props)

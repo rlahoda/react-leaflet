@@ -8,22 +8,22 @@ import React, {
   type ComponentType,
 } from 'react'
 
-import type { LeafletContext } from './types'
+import type { LeafletContextValue } from './types'
 
-const { Consumer, Provider } = createContext({})
+const Context = createContext({})
 
-export const LeafletConsumer = Consumer
-export const LeafletProvider = Provider
+export const LeafletConsumer = Context.Consumer
+export const LeafletProvider = Context.Provider
 
 export const withLeaflet = <Props: Object>(
   WrappedComponent: ComponentType<Props>,
 ): ComponentType<$Diff<Props, { leaflet: LeafletContext }>> => {
   const WithLeafletComponent = (props, ref) => (
-    <Consumer>
+    <LeafletConsumer>
       {(leaflet: LeafletContext) => (
         <WrappedComponent {...props} leaflet={leaflet} ref={ref} />
       )}
-    </Consumer>
+    </LeafletConsumer>
   )
 
   // flowlint-next-line sketchy-null-string:off
@@ -35,3 +35,5 @@ export const withLeaflet = <Props: Object>(
 
   return LeafletComponent
 }
+
+export default Context

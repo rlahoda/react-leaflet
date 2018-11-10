@@ -3,7 +3,7 @@
 import { TileLayer } from 'leaflet'
 import { isEqual, reduce } from 'lodash'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import GridLayer from './GridLayer'
 import { EVENTS_RE } from './MapEvented'
 import type { GridLayerProps } from './types'
@@ -11,7 +11,9 @@ import type { GridLayerProps } from './types'
 type LeafletElement = TileLayer.WMS
 type Props = { url: string } & GridLayerProps
 
-class WMSTileLayer extends GridLayer<LeafletElement, Props> {
+export default class WMSTileLayer extends GridLayer<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
     const { url, ...params } = props
     return new TileLayer.WMS(url, this.getOptions(params))
@@ -44,5 +46,3 @@ class WMSTileLayer extends GridLayer<LeafletElement, Props> {
     )
   }
 }
-
-export default withLeaflet(WMSTileLayer)

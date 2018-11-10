@@ -1,9 +1,9 @@
 // @flow
 
-export { LeafletConsumer, LeafletProvider, withLeaflet } from './context'
+export { default as LeafletContext } from './context'
 
 export type {
-  LeafletContext,
+  LeafletContextValue,
   LatLng,
   LatLngBounds,
   ControlPosition,

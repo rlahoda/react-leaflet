@@ -22,7 +22,7 @@ export type LayerContainer = {
   removeLayer: RemoveLayerHandler,
 }
 
-export type LeafletContext = {
+export type LeafletContextValue = {
   map?: Map,
   pane?: ?string,
   layerContainer?: ?LayerContainer,
@@ -92,14 +92,11 @@ export type DivOverlayOptions = {
   onOpen?: () => void,
 }
 
-export type LeafletProps = { leaflet: LeafletContext }
-
 export type MapControlProps = {
-  leaflet: LeafletContext,
   position?: ControlPosition,
 }
 
-export type MapComponentProps = { leaflet: LeafletContext, pane?: string }
+export type MapComponentProps = { pane?: string }
 
 export type DivOverlayProps = MapComponentProps & DivOverlayOptions
 

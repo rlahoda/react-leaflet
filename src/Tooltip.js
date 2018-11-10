@@ -2,14 +2,16 @@
 
 import { Tooltip as LeafletTooltip } from 'leaflet'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import DivOverlay from './DivOverlay'
 import type { DivOverlayProps } from './types'
 
 type LeafletElement = LeafletTooltip
 type Props = DivOverlayProps
 
-class Tooltip extends DivOverlay<LeafletElement, Props> {
+export default class Tooltip extends DivOverlay<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   static defaultProps = {
     pane: 'tooltipPane',
   }
@@ -17,12 +19,12 @@ class Tooltip extends DivOverlay<LeafletElement, Props> {
   createLeafletElement(props: Props): LeafletElement {
     return new LeafletTooltip(
       this.getOptions(props),
-      props.leaflet.popupContainer,
+      this.context.popupContainer,
     )
   }
 
   componentDidMount() {
-    const { popupContainer } = this.props.leaflet
+    const { popupContainer } = this.context
     if (popupContainer == null) return
 
     popupContainer.on({
@@ -33,7 +35,7 @@ class Tooltip extends DivOverlay<LeafletElement, Props> {
   }
 
   componentWillUnmount() {
-    const { popupContainer } = this.props.leaflet
+    const { popupContainer } = this.context
     if (popupContainer == null) return
 
     popupContainer.off({
@@ -57,5 +59,3 @@ class Tooltip extends DivOverlay<LeafletElement, Props> {
     }
   }
 }
-
-export default withLeaflet(Tooltip)

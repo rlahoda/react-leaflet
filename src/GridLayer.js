@@ -2,6 +2,7 @@
 
 import { GridLayer as LeafletGridLayer } from 'leaflet'
 
+import LeafletContext from './context'
 import MapLayer from './MapLayer'
 import type { GridLayerProps } from './types'
 
@@ -9,6 +10,8 @@ export default class GridLayer<
   LeafletElement: LeafletGridLayer,
   Props: GridLayerProps,
 > extends MapLayer<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
     return new LeafletGridLayer(this.getOptions(props))
   }
@@ -25,12 +28,12 @@ export default class GridLayer<
 
   getOptions(props: Props): Props {
     const options = super.getOptions(props)
-    return props.leaflet.map == null
+    return this.context.map == null
       ? options
       : // $FlowFixMe: object spread type
         {
-          maxZoom: props.leaflet.map.options.maxZoom,
-          minZoom: props.leaflet.map.options.minZoom,
+          maxZoom: this.context.map.options.maxZoom,
+          minZoom: this.context.map.options.minZoom,
           ...options,
         }
   }

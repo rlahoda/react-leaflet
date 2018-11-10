@@ -2,7 +2,7 @@
 
 import { ImageOverlay as LeafletImageOverlay, latLngBounds } from 'leaflet'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import MapLayer from './MapLayer'
 import type { LatLngBounds, MapLayerProps } from './types'
 
@@ -15,14 +15,16 @@ type Props = {
   zIndex?: number,
 } & MapLayerProps
 
-class ImageOverlay extends MapLayer<LeafletElement, Props> {
+export default class ImageOverlay extends MapLayer<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
     const el = new LeafletImageOverlay(
       props.url,
       props.bounds,
       this.getOptions(props),
     )
-    this.contextValue = { ...props.leaflet, popupContainer: el }
+    this.contextValue = { ...this.context, popupContainer: el }
     return el
   }
 
@@ -41,5 +43,3 @@ class ImageOverlay extends MapLayer<LeafletElement, Props> {
     }
   }
 }
-
-export default withLeaflet(ImageOverlay)

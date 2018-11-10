@@ -2,7 +2,7 @@
 
 import { Popup as LeafletPopup } from 'leaflet'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import DivOverlay from './DivOverlay'
 import type { LatLng, DivOverlayProps } from './types'
 
@@ -12,7 +12,9 @@ type Props = {
   position?: LatLng,
 } & DivOverlayProps
 
-class Popup extends DivOverlay<LeafletElement, Props> {
+export default class Popup extends DivOverlay<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   static defaultProps = {
     pane: 'popupPane',
   }
@@ -27,7 +29,7 @@ class Popup extends DivOverlay<LeafletElement, Props> {
   createLeafletElement(props: Props): LeafletElement {
     const options = this.getOptions(props)
     options.autoPan = props.autoPan !== false
-    return new LeafletPopup(options, props.leaflet.popupContainer)
+    return new LeafletPopup(options, this.context.popupContainer)
   }
 
   updateLeafletElement(fromProps: Props, toProps: Props) {
@@ -38,7 +40,7 @@ class Popup extends DivOverlay<LeafletElement, Props> {
 
   componentDidMount() {
     const { position } = this.props
-    const { map, popupContainer } = this.props.leaflet
+    const { map, popupContainer } = this.context
     const el = this.leafletElement
 
     if (map != null) {
@@ -61,7 +63,7 @@ class Popup extends DivOverlay<LeafletElement, Props> {
   }
 
   componentWillUnmount() {
-    const { map } = this.props.leaflet
+    const { map } = this.context
 
     if (map != null) {
       map.off({
@@ -95,5 +97,3 @@ class Popup extends DivOverlay<LeafletElement, Props> {
     }
   }
 }
-
-export default withLeaflet(Popup)

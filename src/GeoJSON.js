@@ -3,7 +3,7 @@
 import { GeoJSON as LeafletGeoJSON, type LatLng, type Layer } from 'leaflet'
 import { isFunction } from 'lodash'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import Path from './Path'
 import type { PathProps } from './types'
 
@@ -20,9 +20,13 @@ type Props = {
   coordsToLatLng?: (coords: GeoJSONdata) => LatLng,
 } & PathProps
 
-class GeoJSON extends Path<LeafletElement, Props> {
+export default class GeoJSON extends Path<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
-    return new LeafletGeoJSON(props.data, this.getOptions(props))
+    const el = new LeafletGeoJSON(props.data, this.getOptions(props))
+    this.contextValue = { ...this.context, popupContainer: el }
+    return el
   }
 
   updateLeafletElement(fromProps: Props, toProps: Props) {
@@ -33,5 +37,3 @@ class GeoJSON extends Path<LeafletElement, Props> {
     }
   }
 }
-
-export default withLeaflet(GeoJSON)

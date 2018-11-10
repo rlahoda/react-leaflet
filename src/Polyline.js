@@ -2,18 +2,22 @@
 
 import { Polyline as LeafletPolyline } from 'leaflet'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import Path from './Path'
 import type { LatLng, PathProps } from './types'
 
 type LeafletElement = LeafletPolyline
 type Props = {
-  positions: LatLng[] | LatLng[][],
+  positions: Array<LatLng> | Array<Array<LatLng>>,
 } & PathProps
 
-class Polyline extends Path<LeafletElement, Props> {
+export default class Polyline extends Path<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
-    return new LeafletPolyline(props.positions, this.getOptions(props))
+    const el = new LeafletPolyline(props.positions, this.getOptions(props))
+    this.contextValue = { ...this.context, popupContainer: el }
+    return el
   }
 
   updateLeafletElement(fromProps: Props, toProps: Props) {
@@ -23,5 +27,3 @@ class Polyline extends Path<LeafletElement, Props> {
     this.setStyleIfChanged(fromProps, toProps)
   }
 }
-
-export default withLeaflet(Polyline)

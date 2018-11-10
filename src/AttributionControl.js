@@ -2,7 +2,7 @@
 
 import { Control } from 'leaflet'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import MapControl from './MapControl'
 import type { MapControlProps } from './types'
 
@@ -11,10 +11,13 @@ type Props = {
   prefix?: string,
 } & MapControlProps
 
-class AttributionControl extends MapControl<LeafletElement, Props> {
+export default class AttributionControl extends MapControl<
+  LeafletElement,
+  Props,
+> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
     return new Control.Attribution(props)
   }
 }
-
-export default withLeaflet(AttributionControl)

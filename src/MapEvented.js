@@ -4,6 +4,8 @@ import type { Evented } from 'leaflet'
 import { forEach } from 'lodash'
 import { Component } from 'react'
 
+import LeafletContext from './context'
+
 export const EVENTS_RE = /^on(.+)$/i
 
 type EventHandler = (event: Event) => void
@@ -13,16 +15,15 @@ export default class MapEvented<
   LeafletElement: Evented,
   Props: Object,
 > extends Component<Props> {
-  _leafletEvents: EventsObject
-  leafletElement: LeafletElement
+  static contextType = LeafletContext
 
-  constructor(props: Props) {
-    super(props)
-    this._leafletEvents = this.extractLeafletEvents(props)
-  }
+  _leafletElement: LeafletElement
+  _leafletEvents: EventsObject
 
   componentDidMount() {
-    this.bindLeafletEvents(this._leafletEvents)
+    this._leafletEvents = this.bindLeafletEvents(
+      this.extractLeafletEvents(this.props),
+    )
   }
 
   componentDidUpdate(_prevProps: Props) {
@@ -33,7 +34,7 @@ export default class MapEvented<
   }
 
   componentWillUnmount() {
-    const el = this.leafletElement
+    const el = this._leafletElement
     if (!el) return
 
     forEach(this._leafletEvents, (cb, ev) => {
@@ -79,7 +80,7 @@ export default class MapEvented<
   }
 
   fireLeafletEvent(type: string, data: ?any) {
-    const el = this.leafletElement
+    const el = this._leafletElement
     if (el) el.fire(type, data)
   }
 }

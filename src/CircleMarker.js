@@ -2,7 +2,7 @@
 
 import { CircleMarker as LeafletCircleMarker } from 'leaflet'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import Path from './Path'
 import type { LatLng, PathProps } from './types'
 
@@ -12,10 +12,12 @@ type Props = {
   radius: number,
 } & PathProps
 
-class CircleMarker extends Path<LeafletElement, Props> {
+export default class CircleMarker extends Path<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
     const el = new LeafletCircleMarker(props.center, this.getOptions(props))
-    this.contextValue = { ...props.leaflet, popupContainer: el }
+    this.contextValue = { ...this.context, popupContainer: el }
     return el
   }
 
@@ -28,5 +30,3 @@ class CircleMarker extends Path<LeafletElement, Props> {
     }
   }
 }
-
-export default withLeaflet(CircleMarker)

@@ -3,17 +3,22 @@
 import { Control } from 'leaflet'
 import { Component } from 'react'
 
+import LeafletContext from './context'
 import type { MapControlProps } from './types'
 
 export default class MapControl<
   LeafletElement: Control,
   Props: MapControlProps,
 > extends Component<Props> {
-  leafletElement: LeafletElement
+  static contextType = LeafletContext
 
-  constructor(props: Props) {
-    super(props)
-    this.leafletElement = this.createLeafletElement(this.props)
+  _leafletElement: LeafletElement
+
+  get leafletElement(): LeafletElement {
+    if (this._leafletElement == null) {
+      this._leafletElement = this.createLeafletElement(this.props)
+    }
+    return this._leafletElement
   }
 
   createLeafletElement(_props: Props): LeafletElement {
@@ -27,7 +32,7 @@ export default class MapControl<
   }
 
   componentDidMount() {
-    this.leafletElement.addTo(this.props.leaflet.map)
+    this.leafletElement.addTo(this.context.map)
   }
 
   componentDidUpdate(prevProps: Props) {

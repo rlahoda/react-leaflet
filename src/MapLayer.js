@@ -3,23 +3,28 @@
 import type { Layer } from 'leaflet'
 import React, { Fragment } from 'react'
 
-import { LeafletProvider } from './context'
+import LeafletContext from './context'
 import MapComponent from './MapComponent'
-import type { LeafletContext, MapLayerProps } from './types'
+import type { LeafletContextValue, MapLayerProps } from './types'
 
 export default class MapLayer<
   LeafletElement: Layer,
   Props: MapLayerProps,
 > extends MapComponent<LeafletElement, Props> {
-  contextValue: ?LeafletContext
+  static contextType = LeafletContext
 
-  constructor(props: Props) {
-    super(props)
-    this.leafletElement = this.createLeafletElement(props)
-  }
+  _leafletElement: LeafletElement
+  contextValue: ?LeafletContextValue
 
   get layerContainer(): Layer {
-    return this.props.leaflet.layerContainer || this.props.leaflet.map
+    return this.context.layerContainer || this.context.map
+  }
+
+  get leafletElement(): LeafletElement {
+    if (this._leafletElement == null) {
+      this._leafletElement = this.createLeafletElement(this.props)
+    }
+    return this._leafletElement
   }
 
   createLeafletElement(_props: Props): LeafletElement {
@@ -30,14 +35,15 @@ export default class MapLayer<
 
   componentDidMount() {
     super.componentDidMount()
-    this.layerContainer.addLayer(this.leafletElement)
+    const el = this.leafletElement
+    this.layerContainer.addLayer(el)
   }
 
   componentDidUpdate(prevProps: Props) {
     super.componentDidUpdate(prevProps)
 
     if (this.props.attribution !== prevProps.attribution) {
-      const { map } = this.props.leaflet
+      const { map } = this.context
       if (map != null && map.attributionControl != null) {
         map.attributionControl.removeAttribution(prevProps.attribution)
         map.attributionControl.addAttribution(this.props.attribution)
@@ -57,10 +63,12 @@ export default class MapLayer<
     if (children == null) {
       return null
     }
-    return this.contextValue == null ? (
+    return this.leafletElement == null || this.contextValue == null ? (
       <Fragment>{children}</Fragment>
     ) : (
-      <LeafletProvider value={this.contextValue}>{children}</LeafletProvider>
+      <LeafletContext.Provider value={this.contextValue}>
+        {children}
+      </LeafletContext.Provider>
     )
   }
 }

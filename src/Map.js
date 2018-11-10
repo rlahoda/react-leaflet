@@ -9,13 +9,13 @@ import {
 import { omit } from 'lodash'
 import React, { type Node } from 'react'
 
-import { LeafletProvider } from './context'
+import LeafletContext from './context'
 import MapEvented from './MapEvented'
 import updateClassName from './utils/updateClassName'
 import type {
   LatLng,
   LatLngBounds,
-  LeafletContext,
+  LeafletContextValue,
   Point,
   Viewport,
 } from './types'
@@ -98,7 +98,7 @@ type Props = {
 
 export default class Map extends MapEvented<LeafletElement, Props> {
   className: ?string
-  contextValue: ?LeafletContext
+  contextValue: ?LeafletContextValue
   container: ?HTMLDivElement
   viewport: Viewport = {
     center: undefined,
@@ -332,9 +332,9 @@ export default class Map extends MapEvented<LeafletElement, Props> {
         ref={this.bindContainer}
         style={this.props.style}>
         {this.contextValue ? (
-          <LeafletProvider value={this.contextValue}>
+          <LeafletContext.Provider value={this.contextValue}>
             {this.props.children}
-          </LeafletProvider>
+          </LeafletContext.Provider>
         ) : null}
       </div>
     )

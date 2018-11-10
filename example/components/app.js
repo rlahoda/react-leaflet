@@ -26,7 +26,7 @@ Leaflet.Icon.Default.imagePath =
 const App = () => (
   <StrictMode>
     <h1>React-Leaflet examples</h1>
-    <h2>Popup with Marker</h2>
+    {/* <h2>Popup with Marker</h2>
     <SimpleExample />
     <h2>Events</h2>
     <p>Click the map to show a marker at your detected location</p>
@@ -41,10 +41,10 @@ const App = () => (
     <h2>Tooltips</h2>
     <TooltipExample />
     <h2>Zoom control</h2>
-    <ZoomControlExample />
+    <ZoomControlExample /> */}
     <h2>Layers control</h2>
     <LayersControlExample />
-    <h2>Panes</h2>
+    {/* <h2>Panes</h2>
     <PaneExample />
     <h2>Draggable Marker</h2>
     <DraggableExample />
@@ -59,7 +59,7 @@ const App = () => (
     <h2>WMS tile layer</h2>
     <WMSTileLayerExample />
     <h2>Video overlay</h2>
-    <VideoOverlayExample />
+    <VideoOverlayExample /> */}
   </StrictMode>
 )
 

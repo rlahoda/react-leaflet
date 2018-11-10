@@ -5,8 +5,8 @@ import { forEach, omit, uniqueId } from 'lodash'
 import React, { Component, type Node } from 'react'
 import warning from 'warning'
 
-import { LeafletProvider, withLeaflet } from './context'
-import type { LeafletContext } from './types'
+import LeafletContext from './context'
+import type { LeafletContextValue } from './types'
 
 const LEAFLET_PANES = [
   'tile',
@@ -35,7 +35,6 @@ const paneStyles = {
 type Props = {
   children: Node,
   className?: string,
-  leaflet: LeafletContext,
   name?: string,
   pane?: string,
   style?: Object,
@@ -43,10 +42,12 @@ type Props = {
 
 type State = {
   name: ?string,
-  context: ?LeafletContext,
+  context: ?LeafletContextValue,
 }
 
-class Pane extends Component<Props, State> {
+export default class Pane extends Component<Props, State> {
+  static contextType = LeafletContext
+
   state = {
     name: undefined,
     context: undefined,
@@ -88,7 +89,7 @@ class Pane extends Component<Props, State> {
   }
 
   createPane(props: Props) {
-    const { map } = props.leaflet
+    const { map } = this.context
     const name = props.name || `pane-${uniqueId()}`
 
     if (map != null && map.createPane != null) {
@@ -105,7 +106,7 @@ class Pane extends Component<Props, State> {
       }
 
       this.setState(
-        { name, context: { ...props.leaflet, pane: name } },
+        { name, context: { ...this.context, pane: name } },
         this.setStyle,
       )
     }
@@ -118,7 +119,7 @@ class Pane extends Component<Props, State> {
       const pane = this.getPane(name)
       if (pane != null && pane.remove) pane.remove()
 
-      const { map } = this.props.leaflet
+      const { map } = this.context
       if (map != null && map._panes != null) {
         map._panes = omit(map._panes, name)
         map._paneRenderers = omit(map._paneRenderers, name)
@@ -141,23 +142,21 @@ class Pane extends Component<Props, State> {
   }
 
   getParentPane(): ?HTMLElement {
-    return this.getPane(this.props.pane || this.props.leaflet.pane)
+    return this.getPane(this.props.pane || this.context.pane)
   }
 
   getPane(name: ?string): ?HTMLElement {
-    if (name != null && this.props.leaflet.map != null) {
-      return this.props.leaflet.map.getPane(name)
+    if (name != null && this.context.map != null) {
+      return this.context.map.getPane(name)
     }
   }
 
   render() {
     const { context } = this.state
     return context ? (
-      <LeafletProvider value={context}>
+      <LeafletContext.Provider value={context}>
         <div style={paneStyles}>{this.props.children}</div>
-      </LeafletProvider>
+      </LeafletContext.Provider>
     ) : null
   }
 }
-
-export default withLeaflet(Pane)

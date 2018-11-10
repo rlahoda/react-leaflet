@@ -2,7 +2,7 @@
 
 import { Circle as LeafletCircle } from 'leaflet'
 
-import { withLeaflet } from './context'
+import LeafletContext from './context'
 import Path from './Path'
 import type { LatLng, MapLayerProps, PathOptions } from './types'
 
@@ -14,10 +14,14 @@ type Props = {
   PathOptions &
   Object
 
-class Circle extends Path<LeafletElement, Props> {
+export default class Circle extends Path<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
     const { center, radius, ...options } = props
-    return new LeafletCircle(center, radius, this.getOptions(options))
+    const el = new LeafletCircle(center, radius, this.getOptions(options))
+    this.contextValue = { ...this.context, popupContainer: el }
+    return el
   }
 
   updateLeafletElement(fromProps: Props, toProps: Props) {
@@ -29,5 +33,3 @@ class Circle extends Path<LeafletElement, Props> {
     }
   }
 }
-
-export default withLeaflet(Circle)

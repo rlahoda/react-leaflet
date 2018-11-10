@@ -3,7 +3,7 @@
 import { type Icon, Marker as LeafletMarker } from 'leaflet'
 import React from 'react'
 
-import { LeafletProvider, withLeaflet } from './context'
+import LeafletContext from './context'
 import MapLayer from './MapLayer'
 import type { LatLng, MapLayerProps } from './types'
 
@@ -16,10 +16,12 @@ type Props = {
   zIndexOffset?: number,
 } & MapLayerProps
 
-class Marker extends MapLayer<LeafletElement, Props> {
+export default class Marker extends MapLayer<LeafletElement, Props> {
+  static contextType = LeafletContext
+
   createLeafletElement(props: Props): LeafletElement {
     const el = new LeafletMarker(props.position, this.getOptions(props))
-    this.contextValue = { ...props.leaflet, popupContainer: el }
+    this.contextValue = { ...this.context, popupContainer: el }
     return el
   }
 
@@ -47,10 +49,13 @@ class Marker extends MapLayer<LeafletElement, Props> {
 
   render() {
     const { children } = this.props
-    return children == null || this.contextValue == null ? null : (
-      <LeafletProvider value={this.contextValue}>{children}</LeafletProvider>
+    const el = this.leafletElement
+    return children == null ||
+      this.leafletElement == null ||
+      this.contextValue == null ? null : (
+      <LeafletContext.Provider value={this.contextValue}>
+        {children}
+      </LeafletContext.Provider>
     )
   }
 }
-
-export default withLeaflet(Marker)
