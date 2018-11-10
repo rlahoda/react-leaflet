@@ -7,6 +7,7 @@ import warning from 'warning'
 
 import LeafletContext from './context'
 import type { LeafletContextValue } from './types'
+import { addClassName, removeClassName } from './utils/updateClassName'
 
 const LEAFLET_PANES = [
   'tile',
@@ -73,9 +74,9 @@ export default class Pane extends Component<Props, State> {
       // Remove the previous css class name from the pane if it has changed.
       // setStyle() will take care of adding in the updated className
       if (prevProps.className && this.props.className !== prevProps.className) {
-        const pane = this.getPane()
+        const pane = this.getPane(this.state.name)
         if (pane != null && prevProps.className != null) {
-          pane.classList.remove(prevProps.className)
+          removeClassName(pane, prevProps.className)
         }
       }
 
@@ -131,7 +132,7 @@ export default class Pane extends Component<Props, State> {
     const pane = this.getPane(this.state.name)
     if (pane) {
       if (className) {
-        pane.classList.add(className)
+        addClassName(pane, className)
       }
       if (style) {
         forEach(style, (value, key) => {

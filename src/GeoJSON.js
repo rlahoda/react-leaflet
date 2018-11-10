@@ -1,7 +1,6 @@
 // @flow
 
 import { GeoJSON as LeafletGeoJSON, type LatLng, type Layer } from 'leaflet'
-import { isFunction } from 'lodash'
 
 import LeafletContext from './context'
 import Path from './Path'
@@ -30,7 +29,7 @@ export default class GeoJSON extends Path<LeafletElement, Props> {
   }
 
   updateLeafletElement(fromProps: Props, toProps: Props) {
-    if (isFunction(toProps.style)) {
+    if (typeof toProps.style === 'function') {
       this.setStyle(toProps.style)
     } else {
       this.setStyleIfChanged(fromProps, toProps)
