@@ -1,10 +1,11 @@
 // @flow
 
 import type { Path as PathType } from 'leaflet'
-import { isEqual, pick } from 'lodash'
+import isEqual from 'fast-deep-equal'
 
 import MapLayer from './MapLayer'
 import type { PathOptions, PathProps } from './types'
+import pick from './utils/pick'
 
 const OPTIONS = [
   'stroke',
@@ -33,11 +34,8 @@ export default class Path<
   LeafletElement: PathType,
   Props: PathProps,
 > extends MapLayer<LeafletElement, Props> {
-  leafletElement: LeafletElement
-
   constructor(props: Props) {
     super(props)
-    this.leafletElement = this.createLeafletElement(props)
     if (this.contextValue == null) {
       this.contextValue = {
         ...props.leaflet,

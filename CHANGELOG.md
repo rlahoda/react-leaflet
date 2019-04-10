@@ -1,8 +1,36 @@
+## v2.2.1 (2019-02-17)
+
+- Fixed passing options in the `LayerGroup` component ([PR #570](https://github.com/PaulLeCam/react-leaflet/pull/570) by _failociraptor_).
+- [website] Added `react-leaflet-textpath` plugin ([PR #556](https://github.com/PaulLeCam/react-leaflet/pull/556) by _clementallen_).
+- [website] Minor text fixes to components docs ([PR #558](https://github.com/PaulLeCam/react-leaflet/pull/558) by _arthurRuf_).
+- [website] Updated compatibility info for 5 plugins and added 2 new plugins ([PR #560](https://github.com/PaulLeCam/react-leaflet/pull/560) and [PR #564](https://github.com/PaulLeCam/react-leaflet/pull/564) by _mhasbie_).
+- [website] Updated `react-leaflet-control` compatibility status ([PR #567](https://github.com/PaulLeCam/react-leaflet/pull/567) by _robinmetral_).
+- [website] Updated third party compatibility docs for 2 plugins ([PR #568](https://github.com/PaulLeCam/react-leaflet/pull/568) by _renanbandeira_).
+
+## v2.2.0 (2019-01-12)
+
+- Updated Leaflet dependency to v1.4.
+- Fixed duplicate element creation in `Path` ([PR #549](https://github.com/PaulLeCam/react-leaflet/pull/549) by _vadzim_).
+- Changed `whenReady` logic in `Map` to get triggered after React reference is bound.
+- [internal] Replaced `lodash` with `fast-deep-equal` and vanilla JS implementations ([PR #554](https://github.com/PaulLeCam/react-leaflet/pull/554) by _jtfell_).
+- [website] Added `react-leaflet-semicircle` plugin ([PR #552](https://github.com/PaulLeCam/react-leaflet/pull/552) by _clementallen_).
+
+## v2.1.4 (2018-12-22)
+
+Fixed event handlers changes in `Map` component.
+
+## v2.1.3 (2018-12-15)
+
+- [website] Added `react-leaflet-figure-editor` plugin ([PR #542](https://github.com/PaulLeCam/react-leaflet/pull/542) by _argonavt11_).
+- [website] Added `react-leaflet-box-zoom` plugin ([PR #543](https://github.com/PaulLeCam/react-leaflet/pull/543) by _ChrisLowe-Takor_).
+- Added example for custom icons usage ([PR #545](https://github.com/PaulLeCam/react-leaflet/pull/545) by _rlahoda_).
+- Updated Flow types support for Flow v0.89.
+
 ## v2.1.2 (2018-11-10)
 
 - Fixed support for multiple classes in the `Pane` component.
-- [internal] Replaced some lodash functions ([PR #533](https://github.com/PaulLeCam/react-leaflet/pull/533) by *radeno*).
-- [website] Added `react-leaflet-geojson-patterns` plugin ([PR #536](https://github.com/PaulLeCam/react-leaflet/pull/536) by *lkazberova*).
+- [internal] Replaced some lodash functions ([PR #533](https://github.com/PaulLeCam/react-leaflet/pull/533) by _radeno_).
+- [website] Added `react-leaflet-geojson-patterns` plugin ([PR #536](https://github.com/PaulLeCam/react-leaflet/pull/536) by _lkazberova_).
 
 ## v2.1.1 (2018-10-22)
 

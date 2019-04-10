@@ -1,7 +1,7 @@
 // @flow
 
 import { TileLayer } from 'leaflet'
-import { isEqual } from 'lodash'
+import isEqual from 'fast-deep-equal'
 
 import { withLeaflet } from './context'
 import GridLayer from './GridLayer'
@@ -42,4 +42,4 @@ class WMSTileLayer extends GridLayer<LeafletElement, Props> {
   }
 }
 
-export default withLeaflet(WMSTileLayer)
+export default withLeaflet<Props, WMSTileLayer>(WMSTileLayer)

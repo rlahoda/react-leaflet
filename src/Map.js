@@ -6,12 +6,12 @@ import {
   type CRS,
   type Renderer,
 } from 'leaflet'
-import { omit } from 'lodash'
 import React, { type Node } from 'react'
 
 import { LeafletProvider } from './context'
 import MapEvented from './MapEvented'
 import updateClassName from './utils/updateClassName'
+import omit from './utils/omit'
 import type {
   LatLng,
   LatLngBounds,
@@ -105,6 +105,7 @@ export default class Map extends MapEvented<LeafletElement, Props> {
     zoom: undefined,
   }
 
+  _ready: boolean = false
   _updating: boolean = false
 
   constructor(props: Props) {
@@ -266,7 +267,7 @@ export default class Map extends MapEvented<LeafletElement, Props> {
   }
 
   componentDidMount() {
-    const props = omit(this.props, OTHER_PROPS)
+    const props = omit(this.props, ...OTHER_PROPS)
     this.leafletElement = this.createLeafletElement(props)
 
     this.leafletElement.on('move', this.onViewportChange)
@@ -274,10 +275,6 @@ export default class Map extends MapEvented<LeafletElement, Props> {
 
     if (props.bounds != null) {
       this.leafletElement.fitBounds(props.bounds, props.boundsOptions)
-    }
-
-    if (this.props.whenReady) {
-      this.leafletElement.whenReady(this.props.whenReady)
     }
 
     this.contextValue = {
@@ -290,6 +287,14 @@ export default class Map extends MapEvented<LeafletElement, Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
+    if (this._ready === false) {
+      this._ready = true
+      if (this.props.whenReady) {
+        this.leafletElement.whenReady(this.props.whenReady)
+      }
+    }
+
+    super.componentDidUpdate(prevProps)
     this.updateLeafletElement(prevProps, this.props)
   }
 
